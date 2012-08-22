@@ -1,4 +1,4 @@
-define(['main_scene', 'room01_scene', 'lib/class'], function(MainScene, Room01Scene) {
+define(['main_scene', 'room01_scene', 'room02_scene', 'lib/class'], function(MainScene, Room01Scene, Room02Scene) {
 
   /**
    *
@@ -23,6 +23,9 @@ define(['main_scene', 'room01_scene', 'lib/class'], function(MainScene, Room01Sc
           break;
         case 'room01':
           scene = new Room01Scene();
+          break;
+        case 'room02':
+          scene = new Room02Scene();
           break;
       }
       return scene;

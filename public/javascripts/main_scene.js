@@ -29,10 +29,6 @@ define(['base_scene', 'main_map', 'entityfactory', 'lib/underscore-min'],
      * Entity配置
      */
     waitInTheWings: function(entities) {
-      //console.log('MainScene - waitInTheWings');
-
-      //_.each(entities, function(entity) {
-      //
       //});
     },
 
@@ -42,8 +38,10 @@ define(['base_scene', 'main_map', 'entityfactory', 'lib/underscore-min'],
     setPlayer: function(aPlayer) {
       if (!this.player) {
         this.player = aPlayer;
+        this.stage.addChild(this.player);
+      } else {
+        this.addChild(this.stage);
       }
-      this.stage.addChild(this.player);
     },
 
     /**

@@ -34,16 +34,7 @@ define(function() {
     /**
      *
      */
-    info: function() {
-      console.log('gameframe:', game.frame, 'id:', this.id, ' walk:', this.walk, ' direction:', this.direction,
-      ' isMoving:', this.isMoving, ' x:', this.x, ' y:', this.y, ' vx:', this.vx, ' vy:', this.vy, ' frame:', this.frame);
-    },
-
-    /**
-     *
-     */
     onEnterFrame: function() {
-      console.log(game.fps);
       if (game.frame % 5 == 0) {
         this.walk++;
         this.walk %= 3+1;

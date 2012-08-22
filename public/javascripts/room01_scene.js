@@ -28,9 +28,6 @@ define(['base_scene', 'room01_map'], function(BaseScene, Room01Map) {
      * Entity配置
      */
     waitInTheWings: function(entities) {
-      //console.log('MainScene - waitInTheWings');
-      //console.log(entities);
-
       // ...
     },
 
@@ -40,9 +37,12 @@ define(['base_scene', 'room01_map'], function(BaseScene, Room01Map) {
     setPlayer: function(aPlayer) {
       if (!this.player) {
         this.player = aPlayer;
+        this.stage.addChild(this.player);
+      } else {
+        this.addChild(this.stage);
       }
-      this.stage.addChild(this.player);
     },
+
 
     /**
      *

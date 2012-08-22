@@ -41,6 +41,7 @@ var PRELOAD_IMAGES = [
   KOMAINU_IMAGE,
   OTHERNPC_IMAGE,
   MAIN_MAP_IMAGE,
+  MAIN_MAP_IMAGE,
   MAIN_MAP_IMAGE
 ];
 
@@ -64,7 +65,8 @@ var images = {
   komainu: 16,
   other: 17,
   main: 18,
-  room01: 19
+  room01: 19,
+  room02: 20
 };
 
 var Types = {
@@ -85,7 +87,8 @@ var Types = {
   },
   Scenes: {
     MAIN: 'main',
-    ROOM01: 'room01'
+    ROOM01: 'room01',
+    ROOM02: 'room02'
   },
   Entities: {
     // Player

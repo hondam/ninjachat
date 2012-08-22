@@ -2,15 +2,6 @@ var cls = require('./lib/class'),
   path = require('path'),
   fs = require('fs');
 
-//var cls = require('./lib/class'),
-//  path = require('path'),
-//  fs = require('fs'),
-//  _ = require('underscore'),
-//  Log = require('log'),
-//  log = new Log('debug'),
-//  Utils = require('./utils'),
-//  Checkpoint = require('./checkpoint');
-
 /**
  *
  */

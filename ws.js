@@ -42,6 +42,11 @@ WS.Server = cls.Class.extend({
         mobs: [],
         npcs: [],
         players: []
+      },
+      'room02': {
+        mobs: [],
+        npcs: [],
+        players: []
       }
     };
     // -------

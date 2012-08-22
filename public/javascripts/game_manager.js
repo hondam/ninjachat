@@ -23,6 +23,7 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
       this.sf = new SceneFactory();
       this.scenes['main'] = this.sf.createScene('main');
       this.scenes['room01'] = this.sf.createScene('room01');
+      this.scenes['room02'] = this.sf.createScene('room02');
       this.currentScene = this.getSceneByName_('main');
     },
 
@@ -114,7 +115,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
               clearInterval(moveWaiting);
               self.player.x = aData[3];
               self.player.y = aData[4];
-              //self.scenes[mSceneName].stage.addChild(self.player);
               self.scenes[mSceneName].setPlayer(self.player);
               self.changeScene(cSceneName, mSceneName);
             } else {
