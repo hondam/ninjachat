@@ -47,6 +47,14 @@ define(['base_scene', 'main_map', 'entityfactory', 'lib/underscore-min'],
     /**
      *
      */
+    removePlayer: function() {
+      this.stage.removeChild(this.player);
+      delete this.player;
+    },
+
+    /**
+     *
+     */
     go: function(aBeforeScene) {
       console.log('MainScene - go');
 

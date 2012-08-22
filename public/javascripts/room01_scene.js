@@ -43,6 +43,13 @@ define(['base_scene', 'room01_map'], function(BaseScene, Room01Map) {
       }
     },
 
+    /**
+     *
+     */
+    removePlayer: function() {
+      this.stage.removeChild(this.player);
+      delete this.player;
+    },
 
     /**
      *

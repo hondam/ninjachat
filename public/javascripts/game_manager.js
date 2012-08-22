@@ -81,12 +81,12 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
        * サーバから移動メッセージを受け取った場合のコールバック
        */
       this.client.onMove(function(aData) {
-        //console.log('GameManager - onMove', aData);
+        console.log('GameManager - onMove', aData);
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName === cSceneName) {
-          self.player.move(aData[3]);
-          //self.currentScene.player.move(aData[3]);
+          //self.player.move(aData[3]);
+          self.currentScene.player.move(aData[3]);
         }
       });
 
@@ -115,6 +115,8 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
               clearInterval(moveWaiting);
               self.player.x = aData[3];
               self.player.y = aData[4];
+              // この処理以外に解決方法がわからなかった
+              self.currentScene.removePlayer();
               self.scenes[mSceneName].setPlayer(self.player);
               self.changeScene(cSceneName, mSceneName);
             } else {
