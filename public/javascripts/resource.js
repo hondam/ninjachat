@@ -42,6 +42,10 @@ var PRELOAD_IMAGES = [
   OTHERNPC_IMAGE,
   MAIN_MAP_IMAGE,
   MAIN_MAP_IMAGE,
+  MAIN_MAP_IMAGE,
+  MAIN_MAP_IMAGE,
+  MAIN_MAP_IMAGE,
+  MAIN_MAP_IMAGE,
   MAIN_MAP_IMAGE
 ];
 
@@ -66,7 +70,11 @@ var images = {
   other: 17,
   main: 18,
   room01: 19,
-  room02: 20
+  room02: 20,
+  room03: 21,
+  room04: 22,
+  room05: 23,
+  room06: 24
 };
 
 var Types = {
@@ -88,7 +96,11 @@ var Types = {
   Scenes: {
     MAIN: 'main',
     ROOM01: 'room01',
-    ROOM02: 'room02'
+    ROOM02: 'room02',
+    ROOM03: 'room03',
+    ROOM04: 'room04',
+    ROOM05: 'room05',
+    ROOM06: 'room06'
   },
   Entities: {
     // Player

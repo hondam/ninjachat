@@ -24,6 +24,10 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
       this.scenes['main'] = this.sf.createScene('main');
       this.scenes['room01'] = this.sf.createScene('room01');
       this.scenes['room02'] = this.sf.createScene('room02');
+      this.scenes['room03'] = this.sf.createScene('room03');
+      this.scenes['room04'] = this.sf.createScene('room04');
+      this.scenes['room05'] = this.sf.createScene('room05');
+      this.scenes['room06'] = this.sf.createScene('room06');
       this.currentScene = this.getSceneByName_('main');
     },
 

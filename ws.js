@@ -21,7 +21,6 @@ WS.Server = cls.Class.extend({
     this.connections = {};
     this.maps = new Maps('public/javascripts/conf/world_server.json');
 
-
     // dummy data
     var mobs = [
     {"s": 'main', "id":80001, "k":16, "x":256, "y":256},
@@ -33,21 +32,13 @@ WS.Server = cls.Class.extend({
     {"s": 'room01', "id":90002, "k":2, "x":256, "y":156}
     ];
     this.entities = {
-      'main': {
-        mobs: [],
-        npcs: [],
-        players: []
-      },
-      'room01': {
-        mobs: [],
-        npcs: [],
-        players: []
-      },
-      'room02': {
-        mobs: [],
-        npcs: [],
-        players: []
-      }
+      'main': { mobs: [], npcs: [], players: [] },
+      'room01': { mobs: [], npcs: [], players: [] },
+      'room02': { mobs: [], npcs: [], players: [] },
+      'room03': { mobs: [], npcs: [], players: [] },
+      'room04': { mobs: [], npcs: [], players: [] },
+      'room05': { mobs: [], npcs: [], players: [] },
+      'room06': { mobs: [], npcs: [], players: [] }
     };
     // -------
 
@@ -93,7 +84,8 @@ WS.Server = cls.Class.extend({
       self.broadcast(id, BISON.encode([Types.Messages.SPAWN, 0, player]));
 
       /**
-       * Playerメッセージ受信時
+       * receive message
+       *
        */
       conn.on('message', function(aMessage) {
         var mess = BISON.decode(aMessage);
@@ -163,14 +155,23 @@ WS.Server = cls.Class.extend({
         } else {
           console.log('receive other');
         }
-console.log("");
+        console.log("");
       });
 
       /**
-       * Player切断時
+       * connection close
+       *
        */
       conn.on('close', function() {
-        // ...
+        for (var scene in self.entities) {
+          for(var i in self.entities[scene].players) {
+            if (player.id === self.entities[scene].players[i][1]) {
+              self.broadcast(id, BISON.encode([Types.Messages.DESPAWN, scene, player.id]));
+              delete self.connections[player.id];
+              delete self.entities[scene].players[i];
+            }
+          }
+        }
       });
 
     });
