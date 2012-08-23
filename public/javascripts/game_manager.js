@@ -50,7 +50,7 @@ function(WsClient, SceneFactory, Player) {
       this.client.onWelcome(function(aData) {
         self.player = new Player(aData[2].id, aData[2].name, aData[2].kind);
         self.player.setGridPosition(aData[2].x, aData[2].y);
-        self.currentScene.setPlayer(self.player);
+        self.currentScene.addEntity(self.player);
       });
 
       /**
@@ -79,11 +79,10 @@ function(WsClient, SceneFactory, Player) {
        * サーバから移動メッセージを受け取った場合のコールバック
        */
       this.client.onMove(function(aData) {
-        console.log('GameManager - onMove', aData);
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName === cSceneName) {
-          self.currentScene.player.move(aData[3]);
+          self.currentScene.entities[aData[2]].move(aData[3]);
         }
       });
 
@@ -110,8 +109,8 @@ function(WsClient, SceneFactory, Player) {
               clearInterval(moveWaiting);
               self.player.x = aData[3];
               self.player.y = aData[4];
-              self.currentScene.removePlayer();
-              self.scenes[mSceneName].setPlayer(self.player);
+              self.currentScene.removeEntity(self.player);
+              self.scenes[mSceneName].addEntity(self.player);
               self.changeScene(cSceneName, mSceneName);
             } else {
               console.log('move waiting...');
