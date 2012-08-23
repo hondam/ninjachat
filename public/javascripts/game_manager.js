@@ -1,5 +1,5 @@
 define(['ws_client', 'scene_factory', 'player', 'lib/class'], 
-  function(WsClient, SceneFactory, Player) {
+function(WsClient, SceneFactory, Player) {
 
   /**
    *
@@ -19,15 +19,13 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
      * @private
      */
     initScene_: function() {
+      var self = this;
+
       this.scenes = [];
       this.sf = new SceneFactory();
-      this.scenes['main'] = this.sf.createScene('main');
-      this.scenes['room01'] = this.sf.createScene('room01');
-      this.scenes['room02'] = this.sf.createScene('room02');
-      this.scenes['room03'] = this.sf.createScene('room03');
-      this.scenes['room04'] = this.sf.createScene('room04');
-      this.scenes['room05'] = this.sf.createScene('room05');
-      this.scenes['room06'] = this.sf.createScene('room06');
+      ['main', 'room01', 'room02', 'room03', 'room04', 'room05', 'room06'].forEach(function(scene) {
+        self.scenes[scene] = self.sf.createScene(scene);
+      });
       this.currentScene = this.getSceneByName_('main');
     },
 
@@ -44,14 +42,12 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
        * サーバ接続時のコールバック
        */
       this.client.onConnected(function() {
-        //console.log('GameManager - onConnected');
       });
 
       /**
        * サーバからウェルカムメッセージを受け取った場合のコールバック
        */
       this.client.onWelcome(function(aData) {
-        //console.log('GameManager - onWelcome');
         self.player = new Player(aData[2].id, aData[2].name, aData[2].kind);
         self.player.setGridPosition(aData[2].x, aData[2].y);
         self.currentScene.setPlayer(self.player);
@@ -61,7 +57,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
        * サーバからキャラ追加メッセージを受け取った場合のコールバック
        */
       this.client.onSpawn(function(aData) {
-        //console.log('GameManager - onSpawn');
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName === cSceneName) {
@@ -73,7 +68,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
        * サーバからキャラ削除メッセージを受け取った場合のコールバック
        */
       this.client.onDespawn(function(aData) {
-        //console.log('GameManager - onDespawn');
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName === cSceneName) {
@@ -89,7 +83,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName === cSceneName) {
-          //self.player.move(aData[3]);
           self.currentScene.player.move(aData[3]);
         }
       });
@@ -98,7 +91,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
        * サーバからチャットメッセージを受け取った場合のコールバック
        */
       this.client.onChat(function(aData) {
-        //console.log('GameManager - onChat');
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName === cSceneName) {
@@ -110,7 +102,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
        * サーバからシーン変更を受け取った場合のコールバック
        */
       this.client.onScene(function(aData) {
-        //console.log('GameManager - onScene', aData);
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName !== cSceneName) {
@@ -119,7 +110,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
               clearInterval(moveWaiting);
               self.player.x = aData[3];
               self.player.y = aData[4];
-              // この処理以外に解決方法がわからなかった
               self.currentScene.removePlayer();
               self.scenes[mSceneName].setPlayer(self.player);
               self.changeScene(cSceneName, mSceneName);
@@ -134,19 +124,13 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
        * サーバからキャラクタリストメッセージを受け取った場合のコールバック
        */
       this.client.onEntities(function(aData) {
-        //console.log('GameManager - onEntities');
-        var mSceneName = aData[1];
-        var cSceneName = self.getCurrentSceneName();
-        if (mSceneName === cSceneName) {
-          self.currentScene.waitInTheWings(aData[2]);
-        }
+        self.scenes[aData[1]].waitInTheWings(aData[2]);
       });
 
       /**
        *
        */
       this.client.onDirection(function(aData) {
-        //console.log('GameManager - onDirection');
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName === cSceneName) {
@@ -155,12 +139,10 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
       });
 
       this.client.onDisconnected(function(aData) {
-        //console.log('GameManager - onDisconnected');
         // ...
       });
 
       this.client.onError(function() {
-        //console.log('GameManager - onError');
         // ...
       });
 
@@ -171,7 +153,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
      * @public
      */
     connect: function() {
-      //console.log('GameManager - connect');
       if (this.client) {
         this.client.connect();
       }
@@ -182,7 +163,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
      * @public
      */
     tryStarting: function() {
-      //console.log('GameManager - tryStarting');
       var self = this;
       var watchCanStart = setInterval(function() {
         if (self.client.connected) {
@@ -200,7 +180,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
      * @private
      */
     start_: function() {
-      //console.log('GameManager - start_');
       this.currentScene.go();
     },
 
@@ -209,7 +188,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
      * @public
      */
     changeScene: function(aCSceneName, aNSceneName) {
-      //console.log('GameManager - changeScene', aCSceneName, '>', aNSceneName);
       this.currentScene = this.getSceneByName_(aNSceneName);
       this.currentScene.go(aCSceneName);
     },
@@ -219,7 +197,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
      * @public
      */
     getCurrentSceneName: function() {
-      //console.log('GameManager - getCurrentSceneName');
       return this.currentScene.name;
     },
 
@@ -228,7 +205,6 @@ define(['ws_client', 'scene_factory', 'player', 'lib/class'],
      * @private
      */
     getSceneByName_: function(aName) {
-      //console.log('GameManager - getSceneByName_');
       return this.scenes[aName];
     },
 

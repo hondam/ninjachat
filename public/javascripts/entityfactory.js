@@ -2,8 +2,8 @@ define(['mobs', 'npcs', 'player'], function(Mobs, NPCs, Player) {
   var EntityFactory = {};
 
   EntityFactory.createEntity = function(kind, id, name) {
-    if (!kind) {
-      console.log('kind is undefined', true);
+    if (typeof kind === 'undefined') {
+      console.log('kind is undefined', kind);
       return;
     }
     if (!_.isFunction(EntityFactory.builders[kind])) {

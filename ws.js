@@ -23,13 +23,13 @@ WS.Server = cls.Class.extend({
 
     // dummy data
     var mobs = [
-    {"s": 'main', "id":80001, "k":16, "x":256, "y":256},
-    {"s": 'main', "id":80002, "k":17, "x":384, "y":384},
+    {"s": 'main', "id":80001, "k":16, "x":416, "y":288},
+    {"s": 'main', "id":80002, "k":17, "x":896, "y":352},
     {"s": 'room01', "id":80003, "k":16, "x":128, "y":128}
     ];
     var npcs = [
-    {"s": 'main', "id":90001, "k":2, "x":128, "y":128},
-    {"s": 'room01', "id":90002, "k":2, "x":256, "y":156}
+    {"s": 'main', "id":90001, "k":2, "x":192, "y":128},
+    {"s": 'room01', "id":90002, "k":2, "x":256, "y":160}
     ];
     this.entities = {
       'main': { mobs: [], npcs: [], players: [] },
@@ -76,8 +76,8 @@ WS.Server = cls.Class.extend({
       console.log('send scene');
       conn.send(BISON.encode([
         [Types.Messages.WELCOME, Types.Scenes.MAIN, player],
-        [Types.Messages.ENTITIES, Types.Scenes.MAIN, self.entities.main],
-        [Types.Messages.SCENE, Types.Scenes.MAIN]
+          [Types.Messages.SCENE, Types.Scenes.MAIN],
+          [Types.Messages.ENTITIES, Types.Scenes.MAIN, self.entities.main]
       ]));
 
       // 接続者以外には新規接続者のSPAWNメッセージ
@@ -115,11 +115,13 @@ WS.Server = cls.Class.extend({
               var nextScene = self.maps.getNextScene(currentScene, x, y);
               if (nextScene) {
                 console.log('send move');
+                console.log('send entities');
                 console.log('send scene', nextScene);
 
                 conn.send(BISON.encode([
                   [Types.Messages.MOVE, currentScene, p[1], direction],
-                  [Types.Messages.SCENE, nextScene.name, p[1], nextScene.defaultX, nextScene.defaultY]
+                  [Types.Messages.SCENE, nextScene.name, p[1], nextScene.defaultX, nextScene.defaultY],
+                  [Types.Messages.ENTITIES, nextScene.name, self.entities[nextScene.name]]
                 ]));
 
                 delete self.entities[currentScene].players[i];

@@ -104,11 +104,11 @@ var Types = {
   },
   Entities: {
     // Player
-    NINJA01: 1,
-    NINJA02: 2,
-    NINJA03: 3,
-    NINJA04: 4,
-    NINJA05: 5,
+    NINJA01: 0,
+    NINJA02: 1,
+    NINJA03: 2,
+    NINJA04: 3,
+    NINJA05: 4,
     KUNOICHI01: 6,
     KUNOICHI02: 7,
     KUNOICHI03: 8,

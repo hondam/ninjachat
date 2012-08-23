@@ -10,8 +10,6 @@ define(['base_scene', 'main_map', 'entityfactory', 'lib/underscore-min'],
      *
      */
     initialize: function() {
-      //console.log('MainScene - initialize');
-
       BaseScene.call(this);
 
       this.name = 'main';
@@ -29,7 +27,20 @@ define(['base_scene', 'main_map', 'entityfactory', 'lib/underscore-min'],
      * Entity配置
      */
     waitInTheWings: function(entities) {
-      //});
+console.log('waitInTheWings', entities);
+      var self = this;
+      for(var type in entities) {
+        for (var i in entities[type]) {
+          var e = entities[type][i];
+          // 自身以外
+          if (!(type == 'players' && e[1] == this.player.id)) {
+            var entity = EntityFactory.createEntity(e[2], e[1], null);
+            entity.x = e[3];
+            entity.y = e[4];
+            self.stage.addChild(entity);
+          } 
+        }
+      }
     },
 
     /**
