@@ -1,4 +1,5 @@
-define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'], function($, conf, GameManager) {
+define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'],
+  function($, conf, GameManager) {
 
   enchant();
 
@@ -9,44 +10,46 @@ define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'], function($
     game.preload(PRELOAD_IMAGES);
     game.onload = function() {
 
-      // ゲームマネージャ初期化
+      // initialize game
       var gm = new GameManager();
 
-      // WebSocketサーバへ接続
+      // connect websocket server
       gm.connect();
 
-      // ゲーム開始
+      // try starting game
       gm.tryStarting();
 
-      // キーイベント
+      // keydown event handling
       var isKeyDown = false;
-      $(window).keypress(function(e) {
-        var direction;
-        switch(e.keyCode) {
-          case 37: direction = 'left';  break;
-          case 38: direction = 'up';    break;
-          case 39: direction = 'right'; break;
-          case 40: direction = 'down';  break;
+      document.addEventListener('keydown', function(e) {
+        if (!isKeyDown) {
+          if (37 <= e.keyCode && e.keyCode <= 40) {
+            isKeyDown = !isKeyDown;
+            var direction;
+            switch(e.keyCode) {
+              case 37: direction = 'left';  break;
+              case 38: direction = 'up';    break;
+              case 39: direction = 'right'; break;
+              case 40: direction = 'down';  break;
+            }
+            gm.sendMove(direction);
+          }
         }
-        if (typeof direction !== 'undefined' && !isKeyDown) {
-          isKeyDown = true;
-          gm.sendMove(direction);
+      }, true);
+      document.addEventListener('keyup', function(e) {
+        if (37 <= e.keyCode && e.keyCode <= 40) {
+          isKeyDown = !isKeyDown;
         }
-      });
-      $(window).keyup(function(e) {
-        switch(e.keyCode) {
-          case 37: case 38: case 39: case 40:
-            isKeyDown = false;
-            break;
-        }
-      });
+      }, true);
 
-      // チャットイベント
-        // サーバへチャットメッセージをsend
-        // アクション名、キャラID、シーンID、メッセージ
+      // chat event handling
+
     };
+
+    // starting enchant.js
     //game.start();
     game.debug();
+
   });
 });
 
