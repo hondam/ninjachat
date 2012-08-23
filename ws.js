@@ -76,12 +76,12 @@ WS.Server = cls.Class.extend({
       console.log('send scene');
       conn.send(BISON.encode([
         [Types.Messages.WELCOME, Types.Scenes.MAIN, player],
-          [Types.Messages.SCENE, Types.Scenes.MAIN],
-          [Types.Messages.ENTITIES, Types.Scenes.MAIN, self.entities.main]
+        [Types.Messages.SCENE, Types.Scenes.MAIN],
+        [Types.Messages.ENTITIES, Types.Scenes.MAIN, self.entities.main]
       ]));
 
       // 接続者以外には新規接続者のSPAWNメッセージ
-      self.broadcast(id, BISON.encode([Types.Messages.SPAWN, 0, player]));
+      self.broadcast(id, BISON.encode([Types.Messages.SPAWN, 'main', player]));
 
       /**
        * receive message

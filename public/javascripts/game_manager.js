@@ -1,5 +1,5 @@
-define(['ws_client', 'scene_factory', 'player', 'lib/class'], 
-function(WsClient, SceneFactory, Player) {
+define(['ws_client', 'scene_factory', 'entityfactory', 'player', 'lib/class'], 
+function(WsClient, SceneFactory, EntityFactory, Player) {
 
   /**
    *
@@ -60,7 +60,10 @@ function(WsClient, SceneFactory, Player) {
         var mSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (mSceneName === cSceneName) {
-          // 追加キャラをシーンへ表示
+          var entity = EntityFactory.createEntity(aData[2].kind, aData[2].id, aData[2].name);
+          entity.x = aData[2].x;
+          entity.y = aData[2].y;
+          self.currentScene.addEntity(entity);
         }
       });
 
