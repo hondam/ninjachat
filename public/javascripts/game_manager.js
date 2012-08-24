@@ -36,12 +36,13 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
       var self = this;
 
       // WebSocket Client
-      this.client = new WsClient('210.152.137.37', '3000');
+      this.client = new WsClient(location.hostname, '3000');
 
       /**
        * サーバ接続時のコールバック
        */
       this.client.onConnected(function() {
+        // ...
       });
 
       /**
@@ -57,9 +58,9 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
        * サーバからキャラ追加メッセージを受け取った場合のコールバック
        */
       this.client.onSpawn(function(aData) {
-        var mSceneName = aData[1];
+        var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
-        if (mSceneName === cSceneName) {
+        if (tSceneName === cSceneName) {
           var entity = EntityFactory.createEntity(aData[2].kind, aData[2].id, aData[2].name);
           entity.x = aData[2].x;
           entity.y = aData[2].y;
@@ -71,10 +72,9 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
        * サーバからキャラ削除メッセージを受け取った場合のコールバック
        */
       this.client.onDespawn(function(aData) {
-        var mSceneName = aData[1];
-        var cSceneName = self.getCurrentSceneName();
-        if (mSceneName === cSceneName) {
-          // 追加キャラをシーンから削除
+        var tSceneName = aData[1];
+        if (typeof self.scenes[tSceneName].entities[aData[2]] !== 'undefined') {
+          self.scenes[tSceneName].removeEntity(self.scenes[tSceneName].entities[aData[2]]);
         }
       });
 
@@ -82,9 +82,9 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
        * サーバから移動メッセージを受け取った場合のコールバック
        */
       this.client.onMove(function(aData) {
-        var mSceneName = aData[1];
+        var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
-        if (mSceneName === cSceneName) {
+        if (tSceneName === cSceneName) {
           self.currentScene.entities[aData[2]].move(aData[3]);
         }
       });
@@ -93,9 +93,9 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
        * サーバからチャットメッセージを受け取った場合のコールバック
        */
       this.client.onChat(function(aData) {
-        var mSceneName = aData[1];
+        var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
-        if (mSceneName === cSceneName) {
+        if (tSceneName === cSceneName) {
           // チャットをシーンへ表示
         }
       });
@@ -104,17 +104,17 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
        * サーバからシーン変更を受け取った場合のコールバック
        */
       this.client.onScene(function(aData) {
-        var mSceneName = aData[1];
+        var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
-        if (mSceneName !== cSceneName) {
+        if (tSceneName !== cSceneName) {
           var moveWaiting = setInterval(function() {
             if (self.player.isMoving === false) {
               clearInterval(moveWaiting);
               self.player.x = aData[3];
               self.player.y = aData[4];
               self.currentScene.removeEntity(self.player);
-              self.scenes[mSceneName].addEntity(self.player);
-              self.changeScene(cSceneName, mSceneName);
+              self.scenes[tSceneName].addEntity(self.player);
+              self.changeScene(cSceneName, tSceneName);
             } else {
               console.log('move waiting...');
             }
@@ -133,9 +133,9 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
        *
        */
       this.client.onDirection(function(aData) {
-        var mSceneName = aData[1];
+        var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
-        if (mSceneName === cSceneName) {
+        if (tSceneName === cSceneName) {
           self.player.changeOfDirection(aData[3]);
         }
       });

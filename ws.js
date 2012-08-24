@@ -56,6 +56,7 @@ WS.Server = cls.Class.extend({
       console.log('websocket connection');
 
       var id = '5' + Math.floor(Math.random() * 99);
+
       // 接続プールへ追加
       self.connections[id] = conn;
 
@@ -63,10 +64,10 @@ WS.Server = cls.Class.extend({
       var player = {
         s: 'main',
         id: id,
-        kind: 0,
-        x: 256,
-        y: 224,
-        name: 'test'
+        kind: Math.floor(Math.random() * 15),
+        x: 480,
+        y: 288,
+        name: 'lorem ipsum'
       };
       self.entities.main.players.push([player.s, player.id, player.kind, player.x, player.y, player.name]);
 
@@ -91,7 +92,7 @@ WS.Server = cls.Class.extend({
         var mess = BISON.decode(aMessage);
 
         if (mess[0] === Types.Messages.MOVE) {
-          console.log('receive move');
+          console.log('receive move', mess);
 
           //-----------------------------
           var currentScene = mess[1];
@@ -118,13 +119,26 @@ WS.Server = cls.Class.extend({
                 console.log('send entities');
                 console.log('send scene', nextScene);
 
+console.log(self.entities[nextScene.name].players);
+
+                // 自身はシーン移動
                 conn.send(BISON.encode([
                   [Types.Messages.MOVE, currentScene, p[1], direction],
                   [Types.Messages.SCENE, nextScene.name, p[1], nextScene.defaultX, nextScene.defaultY],
                   [Types.Messages.ENTITIES, nextScene.name, self.entities[nextScene.name]]
                 ]));
 
-                delete self.entities[currentScene].players[i];
+                // それ以外はMOVE, DESPAWN, SPAWN
+                player.x = nextScene.defaultX;
+                player.y = nextScene.defaultY;
+                self.broadcast(id, BISON.encode([
+                  [Types.Messages.MOVE, currentScene, p[1], direction],
+                  [Types.Messages.DESPAWN, currentScene, id],
+                  [Types.Messages.SPAWN, nextScene.name, player]
+                ]));
+
+                //delete self.entities[currentScene].players[i];
+                self.entities[currentScene].players.splice([i], 1);
                 self.entities[nextScene.name].players.push([
                   nextScene.name,
                   p[1],
@@ -139,15 +153,16 @@ WS.Server = cls.Class.extend({
                 if (self.maps.hitCheck(currentScene, x, y)) {
                   console.log('send direction');
 
-                  conn.send(BISON.encode([Types.Messages.DIRECTION, currentScene, p[1], direction]));
+                  self.broadcastAll(BISON.encode([Types.Messages.DIRECTION, currentScene, p[1], direction]));
                 } else {
                   console.log('send move');
 
-                  conn.send(BISON.encode([Types.Messages.MOVE, currentScene, p[1], direction]));
+                  self.broadcastAll(BISON.encode([Types.Messages.MOVE, currentScene, p[1], direction]));
                   self.entities[currentScene].players[i][3] = x;
                   self.entities[currentScene].players[i][4] = y;
                 }
               }
+console.log(self.entities.room02.players);
             }
           }
           //-----------------------------
@@ -170,7 +185,8 @@ WS.Server = cls.Class.extend({
             if (player.id === self.entities[scene].players[i][1]) {
               self.broadcast(id, BISON.encode([Types.Messages.DESPAWN, scene, player.id]));
               delete self.connections[player.id];
-              delete self.entities[scene].players[i];
+              //delete self.entities[scene].players[i];
+              self.entities[scene].players.splice([i], 1);
             }
           }
         }
