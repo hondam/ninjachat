@@ -26,6 +26,17 @@ define(['entityfactory', 'lib/underscore-min'], function(EntityFactory) {
       var self = this;
       if (this.entities[entity.id] === undefined) {
         this.entities[entity.id] = entity;
+
+
+        var balloon = '<div id="B' + entity.id + '" class="balloon"><p>test</p></div>';
+        $(balloon).appendTo("#balloons");
+        var id = '#B' + entity.id;
+        var x = (entity.x + 16) - ($(id).width() / 2);
+        var y = entity.y - $(id).height();
+        $(id).css('left', x + 'px');
+        $(id).css('top', y + 'px');
+
+
         this.stage.addChild(entity);
       } else {
         console.log('This entity already exists : ', entity.id);

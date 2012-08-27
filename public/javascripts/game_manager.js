@@ -98,6 +98,7 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
         var cSceneName = self.getCurrentSceneName();
         if (tSceneName === cSceneName) {
           // チャットをシーンへ表示
+          //self.currentScene.entities[aData[2]].setChat(aData[3]);
         }
       });
 
@@ -137,7 +138,8 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
         var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (tSceneName === cSceneName) {
-          self.player.changeOfDirection(aData[3]);
+          //self.player.changeOfDirection(aData[3]);
+          self.currentScene.entities[aData[2]].changeOfDirection(aData[3]);
         }
       });
 

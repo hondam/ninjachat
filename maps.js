@@ -11,7 +11,7 @@ module.exports = Maps = cls.Class.extend({
    * @public
    */
   init: function(aFile) {
-    console.log('Map - init()');
+//    console.log('Map - init()');
 
     var self = this;
 
@@ -19,7 +19,7 @@ module.exports = Maps = cls.Class.extend({
 
     path.exists(aFile, function(aExists) {
       if (!aExists) {
-        console.log(aFile + " does'nt exist.");
+//        console.log(aFile + " does'nt exist.");
         return;
       }
       fs.readFile(aFile, function(aErr, aFile) {
@@ -34,7 +34,7 @@ module.exports = Maps = cls.Class.extend({
    * @private
    */
   initMap_: function(map) {
-    console.log('Map - initMap()');
+//    console.log('Map - initMap()');
 
     this.maps = map.maps;
     this.isLoaded = true;
@@ -47,7 +47,7 @@ module.exports = Maps = cls.Class.extend({
    * @public
    */
   getNextScene: function(aScene, aX, aY) {
-    console.log('map.js - getNextScene');
+//    console.log('map.js - getNextScene');
 
     var x = aX / 32;
     var y = aY / 32;
@@ -68,12 +68,12 @@ module.exports = Maps = cls.Class.extend({
    * @public
    */
   hitCheck: function(aScene, aX, aY) {
-    console.log('map.js - hitCheck', aScene, aX, aY);
+//    console.log('map.js - hitCheck', aScene, aX, aY);
 
     var x = aX / 32;
     var y = aY / 32;
 
-    console.log(x, y, this.maps[aScene].collisions[y][x]);
+  //  console.log(x, y, this.maps[aScene].collisions[y][x]);
 
     return this.maps[aScene].collisions[y][x];
   }

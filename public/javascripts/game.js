@@ -47,8 +47,8 @@ define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'],
     };
 
     // starting enchant.js
-    //game.start();
-    game.debug();
+    game.start();
+    //game.debug();
 
   });
 });

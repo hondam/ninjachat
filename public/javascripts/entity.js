@@ -42,6 +42,17 @@ define(function() {
       }
       if (this.isMoving) {
         this.moveBy(this.vx, this.vy);
+
+
+        // GTFO!!
+        var id = '#B' + this.id;
+        var x = parseInt($(id).css("left").replace("px", "")) + this.vx;
+        var y = parseInt($(id).css("top").replace("px", "")) + this.vy;
+        $(id).css('left', x + 'px');
+        $(id).css('top', y + 'px');
+
+
+
         if (this.x % 32 == 0 && this.y % 32 == 0) {
           this.isMoving = false;
         }

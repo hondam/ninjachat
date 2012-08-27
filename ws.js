@@ -47,9 +47,33 @@ WS.Server = cls.Class.extend({
       this.entities[scene].npcs.push([npcs[i].s, npcs[i].id, npcs[i].k, npcs[i].x, npcs[i].y]);
     }
 
+    setInterval(function() {
+      for (var s in self.entities) {
+        for (var i in self.entities[s].mobs) {
+          var m = self.entities[s].mobs[i];
+          var way = Math.floor(Math.random() * 4);
+          var x, y, d;
+          switch(way) {
+            case 0: x = m[3] - 32; y = m[4]; d = 'left'; break;
+            case 1: x = m[3] + 32; y = m[4]; d = 'right'; break;
+            case 2: x = m[3]; y = m[4] - 32; d = 'up'; break;
+            case 3: x = m[3]; y = m[4] + 32; d = 'down'; break;
+          }
+          if (self.maps.hitCheck(s, x, y)) {
+            self.broadcastAll(BISON.encode([Types.Messages.DIRECTION, s, m[1], d]));
+          } else {
+            self.broadcastAll(BISON.encode([Types.Messages.MOVE, s, m[1], d]));
+            self.entities[s].mobs[i][3] = x;
+            self.entities[s].mobs[i][4] = y;
+          }
+          self.broadcastAll(BISON.encode([Types.Messages.CHAT, s, m[1], 'chat message']));
+        }
+      }
+    }, 3000);
+
     this.wss = new WebSocketServer({server: server});
     this.wss.on('connection', function(conn) {
-      console.log('websocket connection');
+//      console.log('websocket connection');
 
       var id;
       while(true) {
@@ -74,9 +98,9 @@ WS.Server = cls.Class.extend({
       self.entities.main.players.push([player.s, player.id, player.kind, player.x, player.y, player.name]);
 
       // 接続者にはWELCOME & LIST & SCENEメッセージ
-      console.log('send welcome');
-      console.log('send entities');
-      console.log('send scene');
+//      console.log('send welcome');
+//      console.log('send entities');
+//      console.log('send scene');
       conn.send(BISON.encode([
         [Types.Messages.WELCOME, Types.Scenes.MAIN, player],
         [Types.Messages.SCENE, Types.Scenes.MAIN],
@@ -94,7 +118,7 @@ WS.Server = cls.Class.extend({
         var mess = BISON.decode(aMessage);
 
         if (mess[0] === Types.Messages.MOVE) {
-          console.log('receive move', mess);
+//          console.log('receive move', mess);
 
           //-----------------------------
           var currentScene = mess[1];
@@ -112,16 +136,16 @@ WS.Server = cls.Class.extend({
                 case 'down':  x = p[3]; y = p[4] + 32; break;
               }
 
-              console.log(currentScene, id, direction, x, y);
+//              console.log(currentScene, id, direction, x, y);
  
               // ドア判定
               var nextScene = self.maps.getNextScene(currentScene, x, y);
               if (nextScene) {
-                console.log('send move');
-                console.log('send entities');
-                console.log('send scene', nextScene);
+//                console.log('send move');
+//                console.log('send entities');
+//                console.log('send scene', nextScene);
 
-console.log(self.entities[nextScene.name].players);
+//console.log(self.entities[nextScene.name].players);
 
                 // 自身はシーン移動
                 conn.send(BISON.encode([
@@ -153,26 +177,26 @@ console.log(self.entities[nextScene.name].players);
               } else {
                 // 衝突判定
                 if (self.maps.hitCheck(currentScene, x, y)) {
-                  console.log('send direction');
+//                  console.log('send direction');
 
                   self.broadcastAll(BISON.encode([Types.Messages.DIRECTION, currentScene, p[1], direction]));
                 } else {
-                  console.log('send move');
+//                  console.log('send move');
 
                   self.broadcastAll(BISON.encode([Types.Messages.MOVE, currentScene, p[1], direction]));
                   self.entities[currentScene].players[i][3] = x;
                   self.entities[currentScene].players[i][4] = y;
                 }
               }
-console.log(self.entities.room02.players);
+//console.log(self.entities.room02.players);
             }
           }
           //-----------------------------
 
         } else if (mess[0] === Types.Messages.CHAT) {
-          console.log('receive chat');
+//          console.log('receive chat');
         } else {
-          console.log('receive other');
+//          console.log('receive other');
         }
         console.log("");
       });

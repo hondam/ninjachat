@@ -1,1 +1,3 @@
-enchant.jsを利用した2Dゲーム調チャット
+enchant.js, WebSocket, Node.jsを利用した2Dゲーム調チャット
+
+
