@@ -82,6 +82,7 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
        * サーバから移動メッセージを受け取った場合のコールバック
        */
       this.client.onMove(function(aData) {
+        console.log('onMove: ', aData[3]);
         var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (tSceneName === cSceneName) {
@@ -215,7 +216,9 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
      * @public
      */
     sendMove: function(aDirection) {
-      this.client.sendMove(this.getCurrentSceneName(), this.player.id, aDirection);
+      if (this.player.isMoving === false) {
+        this.client.sendMove(this.getCurrentSceneName(), this.player.id, aDirection);
+      }
     }
 
   });

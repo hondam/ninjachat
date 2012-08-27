@@ -42,7 +42,7 @@ define(function() {
       }
       if (this.isMoving) {
         this.moveBy(this.vx, this.vy);
-        if ((this.vx && this.x % 32 == 0) || (this.vy && this.y % 32 == 0)) {
+        if (this.x % 32 == 0 && this.y % 32 == 0) {
           this.isMoving = false;
         }
       } 
@@ -52,60 +52,64 @@ define(function() {
      *
      */
     move: function(aDirection) {
-      this.vx = this.vy = 0;
-      switch(aDirection) {
-        case 'down': 
-          this.direction = 0;
-          this.vy = this.speed;
-          break;
-        case 'right': 
-          if (this.scaleX == -1) {
-            this.scaleX *= -1;
-          }
-          this.direction = 4;
-          this.vx = this.speed;
-          break;
-        case 'up':
-          this.direction = 8;
-          this.vy = this.speed * -1;
-          break;
-        case 'left':
-          if (this.scaleX == 1) {
-            this.scaleX *= -1;
-          }
-          this.direction = 4;
-          this.vx = this.speed * -1;
-          break;
+      if (this.isMoving === false) {
+        this.vx = this.vy = 0;
+        switch(aDirection) {
+          case 'down': 
+            this.direction = 0;
+            this.vy = this.speed;
+            break;
+          case 'right': 
+            if (this.scaleX == -1) {
+              this.scaleX *= -1;
+            }
+            this.direction = 4;
+            this.vx = this.speed;
+            break;
+          case 'up':
+            this.direction = 8;
+            this.vy = this.speed * -1;
+            break;
+          case 'left':
+            if (this.scaleX == 1) {
+              this.scaleX *= -1;
+            }
+            this.direction = 4;
+            this.vx = this.speed * -1;
+            break;
+        }
+        this.isMoving = true;
       }
-      this.isMoving = true;
     },
 
     /**
      *
      */
     changeOfDirection: function(aDirection) {
-      this.vx = this.vy = 0;
-      switch(aDirection) {
-        case 'down':
-          this.direction = 0;
-          break;
-        case 'right':
-          if (this.scaleX == -1) {
-            this.scaleX *= -1;
-          }
-          this.direction = 4;
-          break;
-        case 'up':
-          this.direction = 8;
-          break;
-        case 'left':
-          if (this.scaleX == 1) {
-            this.scaleX *= -1;
-          }
-          this.direction = 4;
-          break;
-      }
-      this.isMoving = true;
+      if (this.isMoving === false) {
+	      this.vx = this.vy = 0;
+	      switch(aDirection) {
+	        case 'down':
+	          this.direction = 0;
+	          break;
+	        case 'right':
+	          if (this.scaleX == -1) {
+	            this.scaleX *= -1;
+	          }
+	          this.direction = 4;
+	          break;
+	        case 'up':
+	          this.direction = 8;
+	          break;
+	        case 'left':
+	          if (this.scaleX == 1) {
+	            this.scaleX *= -1;
+	          }
+	          this.direction = 4;
+	          break;
+	      }
+	      this.isMoving = true;
+	    }
     }
   });
 

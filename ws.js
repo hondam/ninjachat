@@ -21,25 +21,21 @@ WS.Server = cls.Class.extend({
     this.connections = {};
     this.maps = new Maps('public/javascripts/conf/world_server.json');
 
+    this.entities = {};
+    ['main', 'room01', 'room02', 'room03', 'room04', 'room05', 'room06'].forEach(function(scene) {
+      self.entities[scene] = { mobs: [], npcs: [], players: [] };
+    });
+
     // dummy data
     var mobs = [
-    {"s": 'main', "id":80001, "k":16, "x":416, "y":288},
-    {"s": 'main', "id":80002, "k":17, "x":896, "y":352},
-    {"s": 'room01', "id":80003, "k":16, "x":128, "y":128}
+      {"s": 'main', "id":80001, "k":16, "x":416, "y":288},
+      {"s": 'main', "id":80002, "k":17, "x":896, "y":352},
+      {"s": 'room01', "id":80003, "k":16, "x":128, "y":128}
     ];
     var npcs = [
-    {"s": 'main', "id":90001, "k":2, "x":192, "y":128},
-    {"s": 'room01', "id":90002, "k":2, "x":256, "y":160}
+      {"s": 'main', "id":90001, "k":2, "x":192, "y":128},
+      {"s": 'room01', "id":90002, "k":2, "x":256, "y":160}
     ];
-    this.entities = {
-      'main': { mobs: [], npcs: [], players: [] },
-      'room01': { mobs: [], npcs: [], players: [] },
-      'room02': { mobs: [], npcs: [], players: [] },
-      'room03': { mobs: [], npcs: [], players: [] },
-      'room04': { mobs: [], npcs: [], players: [] },
-      'room05': { mobs: [], npcs: [], players: [] },
-      'room06': { mobs: [], npcs: [], players: [] }
-    };
     // -------
 
     for (var i in mobs) {
@@ -55,7 +51,13 @@ WS.Server = cls.Class.extend({
     this.wss.on('connection', function(conn) {
       console.log('websocket connection');
 
-      var id = '5' + Math.floor(Math.random() * 99);
+      var id;
+      while(true) {
+        id = (10000 + Math.floor(Math.random() * 10000)) + '';
+        if (!(id in self.connections)) {
+          break;
+        }
+      }
 
       // 接続プールへ追加
       self.connections[id] = conn;
