@@ -73,8 +73,6 @@ WS.Server = cls.Class.extend({
 
     this.wss = new WebSocketServer({server: server});
     this.wss.on('connection', function(conn) {
-//      console.log('websocket connection');
-
       var id;
       while(true) {
         id = (10000 + Math.floor(Math.random() * 10000)) + '';
@@ -98,9 +96,6 @@ WS.Server = cls.Class.extend({
       self.entities.main.players.push([player.s, player.id, player.kind, player.x, player.y, player.name]);
 
       // 接続者にはWELCOME & LIST & SCENEメッセージ
-//      console.log('send welcome');
-//      console.log('send entities');
-//      console.log('send scene');
       conn.send(BISON.encode([
         [Types.Messages.WELCOME, Types.Scenes.MAIN, player],
         [Types.Messages.SCENE, Types.Scenes.MAIN],
@@ -118,9 +113,6 @@ WS.Server = cls.Class.extend({
         var mess = BISON.decode(aMessage);
 
         if (mess[0] === Types.Messages.MOVE) {
-//          console.log('receive move', mess);
-
-          //-----------------------------
           var currentScene = mess[1];
           var id = mess[2];
           var direction = mess[3];
@@ -136,17 +128,9 @@ WS.Server = cls.Class.extend({
                 case 'down':  x = p[3]; y = p[4] + 32; break;
               }
 
-//              console.log(currentScene, id, direction, x, y);
- 
               // ドア判定
               var nextScene = self.maps.getNextScene(currentScene, x, y);
               if (nextScene) {
-//                console.log('send move');
-//                console.log('send entities');
-//                console.log('send scene', nextScene);
-
-//console.log(self.entities[nextScene.name].players);
-
                 // 自身はシーン移動
                 conn.send(BISON.encode([
                   [Types.Messages.MOVE, currentScene, p[1], direction],
@@ -163,7 +147,6 @@ WS.Server = cls.Class.extend({
                   [Types.Messages.SPAWN, nextScene.name, player]
                 ]));
 
-                //delete self.entities[currentScene].players[i];
                 self.entities[currentScene].players.splice([i], 1);
                 self.entities[nextScene.name].players.push([
                   nextScene.name,
@@ -177,28 +160,27 @@ WS.Server = cls.Class.extend({
               } else {
                 // 衝突判定
                 if (self.maps.hitCheck(currentScene, x, y)) {
-//                  console.log('send direction');
-
                   self.broadcastAll(BISON.encode([Types.Messages.DIRECTION, currentScene, p[1], direction]));
                 } else {
-//                  console.log('send move');
-
                   self.broadcastAll(BISON.encode([Types.Messages.MOVE, currentScene, p[1], direction]));
                   self.entities[currentScene].players[i][3] = x;
                   self.entities[currentScene].players[i][4] = y;
                 }
               }
-//console.log(self.entities.room02.players);
             }
           }
           //-----------------------------
 
         } else if (mess[0] === Types.Messages.CHAT) {
-//          console.log('receive chat');
+          var currentScene = mess[1];
+          var id = mess[2];
+          var chatMessage = mess[3];
+
+          self.broadcastAll(BISON.encode([Types.Messages.CHAT, currentScene, id, chatMessage])); 
+
         } else {
-//          console.log('receive other');
+          console.log('receive other');
         }
-        console.log("");
       });
 
       /**

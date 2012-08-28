@@ -226,6 +226,16 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
       if (this.player.isMoving === false) {
         this.client.sendMove(this.getCurrentSceneName(), this.player.id, aDirection);
       }
+    },
+
+    /**
+     * サーバへChatメッセージを送信する
+     * @public
+     */
+    sendChat: function(aChatMessage) {
+      if (this.player.isMoving === false) {
+        this.client.sendChat(this.getCurrentSceneName(), this.player.id, aChatMessage);
+      }
     }
 
   });

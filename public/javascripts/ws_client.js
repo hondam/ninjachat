@@ -222,8 +222,8 @@ define(['lib/bison', 'lib/class'], function(BISON) {
       this.sendMessage([Types.Messages.MOVE, aScene, aId, aDirection]);
     },
 
-    sendChat: function() {
-      this.sendMessage([Types.Messages.CHAT]);
+    sendChat: function(aScene, aId, aChatMessage) {
+      this.sendMessage([Types.Messages.CHAT, aScene, aId, aChatMessage]);
     },
 
     onError: function(callback) {

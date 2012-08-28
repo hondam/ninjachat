@@ -33,6 +33,14 @@ define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'],
               case 40: direction = 'down';  break;
             }
             gm.sendMove(direction);
+          } else if (e.keyCode === 13) {
+            if ($('#chatbox').hasClass('active')) {
+              $('#chatbox').removeClass('active');
+              $('#chatinput').blur();
+            } else {
+              $('#chatbox').addClass('active');
+              $('#chatinput').focus();
+            }
           }
         }
       }, true);
@@ -43,12 +51,35 @@ define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'],
       }, true);
 
       // chat event handling
-
+      $('#chatinput').keydown(function(e) {
+        var input = $('#chatinput');
+        // Enter Key
+        if (e.keyCode === 13) {
+          if (input.val() !== '') {
+            gm.sendChat(input.val());
+            input.val('');
+            $('#chatbox').removeClass('active');
+            $('#chatinput').blur();
+            return false;
+          } else {
+            $('#chatbox').removeClass('active');
+            $('#chatinput').blur();
+            return false;
+          }
+        }
+        // Esc key
+        if (e.keyCode === 27) {
+          input.val('');
+          $('#chatbox').removeClass('active');
+          $('#chatinput').blur();
+          return false;
+        }
+      });
     };
 
     // starting enchant.js
-    game.start();
-    //game.debug();
+    //game.start();
+    game.debug();
 
   });
 });
