@@ -61,11 +61,7 @@ define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'],
             $('#chatbox').removeClass('active');
             $('#chatinput').blur();
             return false;
-          } else {
-            $('#chatbox').removeClass('active');
-            $('#chatinput').blur();
-            return false;
-          }
+          } 
         }
         // Esc key
         if (e.keyCode === 27) {

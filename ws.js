@@ -193,7 +193,6 @@ WS.Server = cls.Class.extend({
             if (player.id === self.entities[scene].players[i][1]) {
               self.broadcast(id, BISON.encode([Types.Messages.DESPAWN, scene, player.id]));
               delete self.connections[player.id];
-              //delete self.entities[scene].players[i];
               self.entities[scene].players.splice([i], 1);
             }
           }
