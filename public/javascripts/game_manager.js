@@ -97,8 +97,9 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
         var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (tSceneName === cSceneName) {
+          var isMainScene = (cSceneName == 'main') ? true : false;
           // チャットをシーンへ表示
-          //self.currentScene.entities[aData[2]].setChat(aData[3]);
+          self.currentScene.entities[aData[2]].displayChatMessage(aData[3], isMainScene);
         }
       });
 
@@ -117,6 +118,10 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
               self.currentScene.removeEntity(self.player);
               self.scenes[tSceneName].addEntity(self.player);
               self.changeScene(cSceneName, tSceneName);
+
+              // for balloon
+              $('#balloons')[0].innerHTML = "";
+
             } else {
               console.log('move waiting...');
             }

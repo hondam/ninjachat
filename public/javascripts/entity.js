@@ -44,12 +44,15 @@ define(function() {
         this.moveBy(this.vx, this.vy);
 
 
-        // GTFO!!
+        // for balloon
         var id = '#B' + this.id;
-        var x = parseInt($(id).css("left").replace("px", "")) + this.vx;
-        var y = parseInt($(id).css("top").replace("px", "")) + this.vy;
-        $(id).css('left', x + 'px');
-        $(id).css('top', y + 'px');
+        if ($(id).size() > 0) {
+          var x = parseInt($(id).css("left").replace("px", "")) + this.vx;
+          var y = parseInt($(id).css("top").replace("px", "")) + this.vy;
+          $(id).css('left', x + 'px');
+          $(id).css('top', y + 'px');
+        }
+        //
 
 
 
@@ -121,6 +124,28 @@ define(function() {
 	      }
 	      this.isMoving = true;
 	    }
+    },
+
+    /**
+     *
+     */
+    displayChatMessage: function(aChatMessage, aIsMainScene) {
+      var id = '#B' + this.id;
+
+      if ($(id).size() > 0) {
+        //$(id).children('p').text(aChatMessage);
+        $(id).remove();
+      }
+
+      var balloon = '<div id="B' + this.id + '" class="balloon"><p>' + aChatMessage + '</p></div>';
+      $(balloon).appendTo("#balloons");
+      var x = (this.x - 0) - ($(id).width() / 2);
+      if (!aIsMainScene) {
+        x += 240;
+      }
+      var y = this.y - $(id).height() - 5;
+      $(id).css('left', x + 'px');
+      $(id).css('top', y + 'px');
     }
   });
 

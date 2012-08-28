@@ -28,9 +28,9 @@ WS.Server = cls.Class.extend({
 
     // dummy data
     var mobs = [
-      {"s": 'main', "id":80001, "k":16, "x":416, "y":288},
-      {"s": 'main', "id":80002, "k":17, "x":896, "y":352},
-      {"s": 'room01', "id":80003, "k":16, "x":128, "y":128}
+      {"s": 'main', "id":80001, "k":16, "x":416, "y":288, "t":['ワンワン!', 'グルル...', 'ようこそ！', '部屋の中に入ってみてね']},
+      {"s": 'main', "id":80002, "k":17, "x":896, "y":352, "t":['...', '...', '...', '井戸にも入れるぞ']},
+      {"s": 'room01', "id":80003, "k":16, "x":128, "y":128, "t":['ワンワン!', 'グルル...', 'ワン！', 'ようこそ！']}
     ];
     var npcs = [
       {"s": 'main', "id":90001, "k":2, "x":192, "y":128},
@@ -40,7 +40,7 @@ WS.Server = cls.Class.extend({
 
     for (var i in mobs) {
       var scene = mobs[i].s;
-      this.entities[scene].mobs.push([mobs[i].s, mobs[i].id, mobs[i].k, mobs[i].x, mobs[i].y]);
+      this.entities[scene].mobs.push([mobs[i].s, mobs[i].id, mobs[i].k, mobs[i].x, mobs[i].y, mobs[i].t]);
     }
     for (var i in npcs) {
       var scene = npcs[i].s;
@@ -66,7 +66,7 @@ WS.Server = cls.Class.extend({
             self.entities[s].mobs[i][3] = x;
             self.entities[s].mobs[i][4] = y;
           }
-          self.broadcastAll(BISON.encode([Types.Messages.CHAT, s, m[1], 'chat message']));
+          self.broadcastAll(BISON.encode([Types.Messages.CHAT, s, m[1], m[5][way]]));
         }
       }
     }, 3000);
