@@ -7,7 +7,8 @@ var express = require('express')
   , routes = require('./routes')
   , Ws = require('./ws')
   , app = module.exports = express.createServer()
-  , server = new Ws.Server(app);
+  , server = new Ws.Server(app)
+  , os = require('os');
 
 // Configuration
 
@@ -36,5 +37,6 @@ app.configure('production', function(){
 app.get('/', routes.index);
 
 app.listen(3000, function(){
-  console.log("Browser Access >> http://210.152.137.37:" + app.address().port);
+  var ipaddr = os.networkInterfaces().net0[0].address;
+  console.log("Browser Access >> http://" + ipaddr + ":" + app.address().port);
 });
