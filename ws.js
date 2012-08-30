@@ -169,7 +169,6 @@ WS.Server = cls.Class.extend({
               }
             }
           }
-          //-----------------------------
 
         } else if (mess[0] === Types.Messages.CHAT) {
           var currentScene = mess[1];

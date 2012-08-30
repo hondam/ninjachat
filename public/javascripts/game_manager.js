@@ -75,6 +75,9 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
         var tSceneName = aData[1];
         if (typeof self.scenes[tSceneName].entities[aData[2]] !== 'undefined') {
           self.scenes[tSceneName].removeEntity(self.scenes[tSceneName].entities[aData[2]]);
+          var id = '#B' + aData[2];
+          console.log(id);
+          $(id).remove();
         }
       });
 
