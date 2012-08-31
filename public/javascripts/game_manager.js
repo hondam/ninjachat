@@ -76,7 +76,6 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
         if (typeof self.scenes[tSceneName].entities[aData[2]] !== 'undefined') {
           self.scenes[tSceneName].removeEntity(self.scenes[tSceneName].entities[aData[2]]);
           var id = '#B' + aData[2];
-          console.log(id);
           $(id).remove();
         }
       });
@@ -85,7 +84,6 @@ function(WsClient, SceneFactory, EntityFactory, Player) {
        * サーバから移動メッセージを受け取った場合のコールバック
        */
       this.client.onMove(function(aData) {
-        console.log('onMove: ', aData[3]);
         var tSceneName = aData[1];
         var cSceneName = self.getCurrentSceneName();
         if (tSceneName === cSceneName) {

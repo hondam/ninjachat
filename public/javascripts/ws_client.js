@@ -66,8 +66,6 @@ define(['lib/bison', 'lib/class'], function(BISON) {
                 self.receiveEntities(data[i]);
               } else if (action === Types.Messages.DIRECTION) {
                 self.receiveDirection(data[i]);
-              } else {
-                console.log('receive: ' + data[i][0] + ' ' + data[i][1]);
               } 
             }
           } else {
@@ -88,8 +86,6 @@ define(['lib/bison', 'lib/class'], function(BISON) {
               self.receiveEntities(data);
             } else if (action === Types.Messages.DIRECTION) {
               self.receiveDirection(data);
-            } else {
-              console.log('receive: ' + data[0] + ' ' + data[1]);
             }
           }
         }

@@ -43,7 +43,6 @@ define(['entityfactory', 'lib/underscore-min'], function(EntityFactory) {
     },
 
     go: function(aBeforeScene) {
-      console.log(this.name + ' scene - go');
       game.replaceScene(this);
     }
   });

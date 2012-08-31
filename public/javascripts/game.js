@@ -21,31 +21,38 @@ define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'],
 
       // keydown event handling
       var isKeyDown = false;
+      var isFocus = true;
       document.addEventListener('keydown', function(e) {
         if (!isKeyDown) {
-          if (37 <= e.keyCode && e.keyCode <= 40) {
-            isKeyDown = !isKeyDown;
-            var direction;
-            switch(e.keyCode) {
-              case 37: direction = 'left';  break;
-              case 38: direction = 'up';    break;
-              case 39: direction = 'right'; break;
-              case 40: direction = 'down';  break;
-            }
-            gm.sendMove(direction);
-          } else if (e.keyCode === 13) {
+          if (e.keyCode === 13) {
             if ($('#chatbox').hasClass('active')) {
+              isFocus = true;
               $('#chatbox').removeClass('active');
               $('#chatinput').blur();
             } else {
+              isFocus = false;
               $('#chatbox').addClass('active');
               $('#chatinput').focus();
+            }
+          } else {
+            if (isFocus) {
+              isKeyDown = !isKeyDown;
+              var direction;
+              switch(e.keyCode) {
+                case 37: case 72: direction = 'left';  break;
+                case 38: case 75: direction = 'up';    break;
+                case 39: case 76: direction = 'right'; break;
+                case 40: case 74: direction = 'down';  break;
+              }
+              if (direction) {
+                gm.sendMove(direction);
+              }
             }
           }
         }
       }, true);
       document.addEventListener('keyup', function(e) {
-        if (37 <= e.keyCode && e.keyCode <= 40) {
+        if ((37 <= e.keyCode && e.keyCode <= 40) || (72 <= e.keyCode && e.keyCode <= 76)) {
           isKeyDown = !isKeyDown;
         }
       }, true);
@@ -56,6 +63,7 @@ define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'],
         // Enter Key
         if (e.keyCode === 13) {
           if (input.val() !== '') {
+            isFocus = true;
             gm.sendChat(input.val());
             input.val('');
             $('#chatbox').removeClass('active');
@@ -65,6 +73,7 @@ define(['jquery', 'conf', 'game_manager', 'resource', 'lib/enchant'],
         }
         // Esc key
         if (e.keyCode === 27) {
+          isFocus = true;
           input.val('');
           $('#chatbox').removeClass('active');
           $('#chatinput').blur();
